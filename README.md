@@ -12,12 +12,11 @@ In the /code directory, you can find returnbyfactors package which calculates th
 
 To use returnbyfactors package, use these commands in the directory which you have downloaded.
 
-'''
-
+~~~
 $ cd ./code
-$ pip install .
 
-'''
+$ pip install .
+~~~
 
 After installing package, you can import returnbyfactors to Jupyter Notebooks or Python files.
 

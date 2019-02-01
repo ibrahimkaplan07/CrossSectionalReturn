@@ -2,7 +2,7 @@
 
 The main aim of this research is developing a strategy that maximizes the profits of the investors. The general concept which is known by many investors and researchers is enhancing diversification of portfolios. It is a safety tactic but it has flaws like every  investment tactics.The gain of diversification will lost if the chosen securities move in lockstep with the broader market. For example, an investor may choose a mixture of stocks that all decline in value when certain market conditions arise. The advantage of factor research is, it can offset potential risks by targeting broad, persistent, and long recognized drivers of returns. 
 
-You can find three different factors:volatility,momentum and mean_reversion analyzed by different day ranges in /docs directory.
+You can find three different factors : volatility, momentum and mean_reversion analyzed by different day ranges in /docs directory.
 
 ---
 

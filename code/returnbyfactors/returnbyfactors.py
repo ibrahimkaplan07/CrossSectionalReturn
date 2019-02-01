@@ -5,10 +5,15 @@
 """
 
 import pandas as pd
+import numpy as np
 
-def calc_daybased_return(pivotdata,day):
+def calc_daybased_return(pivotdata,day,filter_by_zscore):
 
     dayrangedreturns = pivotdata.pct_change(periods=day).shift(periods=day*-1)
+    
+    if filter_by_zscore is not None:
+        filtered_returns = abs(dayrangedreturns - dayrangedreturns.mean()) > filter_by_zscore * dayrangedreturns.std()
+        dayrangedreturns[filtered_returns] = np.nan
 
     return dayrangedreturns
 
@@ -21,13 +26,13 @@ def prepare_for_join(pivot,day_range):
     
     return df_dayranged_returns
 
-def analyze_by_score(pivotdata,factor_score,nofgroups=5,return_range=[1,5,10],):
+def analyze_by_score(pivotdata,factor_score,nofgroups=5,return_range=[1,5,10],filter_by_zscore = None):
     
     grouplabeled = factor_score
    
     count=0
     for i in grouplabeled.values:   
-        k = pd.qcut(i,nofgroups,labels=list(range(1,nofgroups+1)),duplicates='drop')
+        k = pd.qcut(i,nofgroups,labels=list(range(1,nofgroups+1)),duplicates='raise')
         grouplabeled.values[count] = k
         count=count+1
     
@@ -38,7 +43,7 @@ def analyze_by_score(pivotdata,factor_score,nofgroups=5,return_range=[1,5,10],):
     
     day_ranged_returns_pivot = []
     for i in return_range:
-        day_ranged_returns_pivot.append(calc_daybased_return(pivotdata,i))
+        day_ranged_returns_pivot.append(calc_daybased_return(pivotdata,i,filter_by_zscore))
 
     day_ranged_returns_df = []
     for i in return_range:
@@ -67,6 +72,7 @@ def analyze_by_score(pivotdata,factor_score,nofgroups=5,return_range=[1,5,10],):
     factor_scores = pd.DataFrame(data=result_dict).set_index('index')
    
     for q in return_range:
+        factor_scores[str(q)+'dayreturn'] = factor_scores[str(q)+'dayreturn'] * 15/q
         factor_scores[str(q)+'dayreturn'] = factor_scores[str(q)+'dayreturn'] - factor_scores[str(q)+'dayreturn'].mean()
 
     return factor_scores
